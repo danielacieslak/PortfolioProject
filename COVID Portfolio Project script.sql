@@ -92,14 +92,8 @@ ORDER BY location, date
 With PopvsVac (continent, location, date, population, new_vaccinations, RollingPeopleVaccinated)
 as
 (
-SELECT 
-	dea.continent, 
-	dea.location, 
-	dea.date, 
-	dea.population, 
-	vac.new_vaccinations,
-	SUM(CAST(vac.new_vaccinations as int)) OVER 
-	(Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
+SUM(CAST(vac.new_vaccinations as int)) OVER (Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
 FROM CovidDeaths dea
 JOIN CovidVaccinations vac
 	ON dea.location = vac.location 
