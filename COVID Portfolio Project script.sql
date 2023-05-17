@@ -1,24 +1,23 @@
-
+/*
+--Covid 19 Data Exploration 
 
 --Skills used: Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types
-
----- Select Data that we are going to be starting with
-
+*/
 
 SELECT location, date, total_cases, new_cases, total_deaths, population
 FROM CovidDeaths
 WHERE continent is NOT NULL
 ORDER BY location, date
 
--- Total Cases vs Total Deaths 
--- Shows probability of daying from Covid in my coutry
+-- Total Cases Vs Total Deaths 
+-- Shows probability of dying from Covid in my coutry
 
 SELECT location, date, total_cases, total_deaths, (total_deaths/total_cases) * 100 as Death_Percentage
 FROM CovidDeaths
-WHERE location = 'Greece' and continent is NOT NULL
+WHERE location = 'Greece' AND continent is NOT NULL
 ORDER BY location, date
 
---Total Cases vs Population
+--Total Cases Vs Population
 --Shows percentage of population with Covid in my country
 
 SELECT location, date, population, total_cases, (total_cases/population) * 100 as Covid_Percentage_Infected
@@ -35,15 +34,13 @@ ORDER BY Covid_Percentage_Infected DESC
 
 --Countries With Highest Death Rate per Population
 
-
 SELECT location, MAX(CAST(total_deaths as int)) as TotalDeathCount
 FROM CovidDeaths
 WHERE continent is NOT NULL
 GROUP BY location
 ORDER BY TotalDeathCount DESC
 
---BREAING THINGS BY CONTINENT
-
+--BREAKING DATA BY CONTINENT
 --Continents With Highest Death Rate per Population
 
 SELECT continent, MAX(CAST(total_deaths as int)) as TotalDeathCount
@@ -51,7 +48,6 @@ FROM CovidDeaths
 WHERE continent is NOT NULL
 GROUP BY continent 
 ORDER BY TotalDeathCount DESC
-
 
 --GLOBAL NUMBERS 
 
@@ -68,7 +64,7 @@ FROM CovidDeaths
 WHERE continent is NOT NULL
 
 --Total Population vs Vaccinations
--- Shows Percentage of Population that has recieved at least one Covid Vaccine
+--Shows Percentage of Population that has recieved at least one Covid Vaccine
 
 
 SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(CAST(vac.new_vaccinations as int)) 
