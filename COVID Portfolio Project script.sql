@@ -71,18 +71,11 @@ WHERE continent is NOT NULL
 -- Shows Percentage of Population that has recieved at least one Covid Vaccine
 
 
-SELECT 
-	dea.continent, 
-	dea.location, 
-	dea.date, 
-	dea.population, 
-	vac.new_vaccinations,
-	SUM(CAST(vac.new_vaccinations as int)) OVER 
-	(Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(CAST(vac.new_vaccinations as int)) 
+	OVER (Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
 FROM CovidDeaths dea
 JOIN CovidVaccinations vac
-	ON dea.location = vac.location 
-	and dea.date = vac.date
+	ON dea.location = vac.location AND dea.date = vac.date
 WHERE dea.continent is NOT NULL
 ORDER BY location, date
 
@@ -96,8 +89,7 @@ SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinatio
 SUM(CAST(vac.new_vaccinations as int)) OVER (Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
 FROM CovidDeaths dea
 JOIN CovidVaccinations vac
-	ON dea.location = vac.location 
-	and dea.date = vac.date
+	ON dea.location = vac.location AND dea.date = vac.date
 WHERE dea.continent is NOT NULL
 )
 SELECT *, (RollingPeopleVaccinated/Population) * 100 FROM PopvsVac
@@ -117,17 +109,11 @@ RollingPeopleVaccinated numeric
 
 INSERT INTO #PercentPopulationVaccinated
 SELECT 
-	dea.continent, 
-	dea.location, 
-	dea.date, 
-	dea.population, 
-	vac.new_vaccinations,
-	SUM(CAST(vac.new_vaccinations as int)) OVER 
-	(Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
+	dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(CAST(vac.new_vaccinations as int)) 
+	VER (Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
 FROM CovidDeaths dea
 JOIN CovidVaccinations vac
-	ON dea.location = vac.location 
-	and dea.date = vac.date
+	ON dea.location = vac.location AND dea.date = vac.date
 WHERE dea.continent is NOT NULL
 
 SELECT *, (RollingPeopleVaccinated/Population) * 100  FROM #PercentPopulationVaccinated
@@ -137,15 +123,9 @@ SELECT *, (RollingPeopleVaccinated/Population) * 100  FROM #PercentPopulationVac
 
 CREATE VIEW PercentPopulationVaccinated as
 SELECT 
-	dea.continent, 
-	dea.location, 
-	dea.date, 
-	dea.population, 
-	vac.new_vaccinations,
-	SUM(CAST(vac.new_vaccinations as int)) OVER 
-	(Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
+	dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, 
+	SUM(CAST(vac.new_vaccinations as int)) OVER  (Partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
 FROM CovidDeaths dea
 JOIN CovidVaccinations vac
-	ON dea.location = vac.location 
-	and dea.date = vac.date
+	ON dea.location = vac.location AND dea.date = vac.date
 WHERE dea.continent is NOT NULL
