@@ -1,24 +1,18 @@
-/*
---Covid 19 Data Exploration 
-
---Skills used: Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types
-*/
+/*Covid 19 Data Exploration */
 
 SELECT location, date, total_cases, new_cases, total_deaths, population
 FROM CovidDeaths
 WHERE continent is NOT NULL
 ORDER BY location, date
 
--- Total Cases Vs Total Deaths 
--- Shows probability of dying from Covid in my coutry
+--Showing probability of dying from Covid in my coutry
 
 SELECT location, date, total_cases, total_deaths, (total_deaths/total_cases) * 100 as Death_Percentage
 FROM CovidDeaths
 WHERE location = 'Greece' AND continent is NOT NULL
 ORDER BY location, date
 
---Total Cases Vs Population
---Shows percentage of population with Covid in my country
+--Showing percentage of population with Covid in my country
 
 SELECT location, date, population, total_cases, (total_cases/population) * 100 as Covid_Percentage_Infected
 FROM CovidDeaths
@@ -40,7 +34,6 @@ WHERE continent is NOT NULL
 GROUP BY location
 ORDER BY TotalDeathCount DESC
 
---BREAKING DATA BY CONTINENT
 --Continents With Highest Death Rate per Population
 
 SELECT continent, MAX(CAST(total_deaths as int)) as TotalDeathCount
